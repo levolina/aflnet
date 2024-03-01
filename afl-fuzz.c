@@ -378,7 +378,7 @@ char **was_fuzzed_map = NULL; /* A 2D array keeping state-specific was_fuzzed in
 u32 fuzzed_map_states = 0;
 u32 fuzzed_map_qentries = 0;
 u32 max_seed_region_count = 0;
-u32 local_port;		/* TCP/UDP port number to use as source */
+u32 local_port;		/* TCP/UDP/SCTP port number to use as source */
 
 /* flags */
 u8 use_net = 0;
@@ -1009,13 +1009,15 @@ int send_over_network()
     response_bytes = NULL;
   }
 
-  //Create a TCP/UDP socket
+  //Create a TCP/UDP/SCTP socket
   int sockfd = -1;
   if (net_protocol == PRO_TCP)
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
   else if (net_protocol == PRO_UDP)
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-
+  else if (net_protocol == PRO_SCTP) {
+    sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_SCTP);
+  }
   if (sockfd < 0) {
     PFATAL("Cannot create a socket");
   }
@@ -9002,7 +9004,7 @@ int main(int argc, char** argv) {
 
       case 'N': /* Network configuration */
         if (use_net) FATAL("Multiple -N options not supported");
-        if (parse_net_config(optarg, &net_protocol, &net_ip, &net_port)) FATAL("Bad syntax used for -N. Check the network setting. [tcp/udp]://127.0.0.1/port");
+        if (parse_net_config(optarg, &net_protocol, &net_ip, &net_port)) FATAL("Bad syntax used for -N. Check the network setting. [tcp/udp/sctp]://127.0.0.1/port");
 
         use_net = 1;
         break;

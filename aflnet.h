@@ -34,7 +34,8 @@ typedef struct {
 
 enum {
   /* 00 */ PRO_TCP,
-  /* 01 */ PRO_UDP
+  /* 01 */ PRO_UDP,
+  /* 02 */ PRO_SCTP
 };
 
 enum {
@@ -128,7 +129,7 @@ int str_split(char* a_str, const char* a_delim, char **result, int a_count);
 /* Remove unwanted characters from the right */
 void str_rtrim(char* a_str);
 
-/* Parse user provided server information to get IP address, transport protocol (TCP/UDP) and port number */
+/* Parse user provided server information to get IP address, transport protocol (TCP/UDP/SCTP) and port number */
 int parse_net_config(u8* net_config, u8* protocol, u8** ip_address, u32* port);
 
 /* Convert state sequence to string */

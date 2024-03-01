@@ -2496,6 +2496,8 @@ int parse_net_config(u8* net_config, u8* protocol, u8** ip_address, u32* port)
         *protocol = PRO_TCP;
       } else if (!strcmp(tokens[0], "udp:")) {
         *protocol = PRO_UDP;
+      } else if (!strcmp(tokens[0], "sctp:")) {
+        *protocol = PRO_SCTP;
       } else return 1;
 
       //TODO: check the format of this IP address
